@@ -53,7 +53,7 @@ def panel(current, prefix):
 <p class="history-context"><strong>当前：{label(current)}</strong> · 查询快照 {current['snapshot']}。历史数据保留当期口径；后续退款与归因结果可能变化。</p>
 <details class="history-compare"><summary>查看历史周数据对照 · {len(weeks)} 期</summary>
 <h3>销售与得物推</h3><div class="history-scroll" tabindex="0" role="region" aria-label="历史销售与得物推，窄屏可左右滚动"><table class="history-table"><thead><tr><th scope="col">报告周次 / 查询日期</th><th scope="col">原始优惠后支付</th><th scope="col">支付订单</th><th scope="col">剔除关闭后销售参考</th><th scope="col">售后中金额</th><th scope="col">得物推消耗</th><th scope="col">优惠后引导支付 ROI</th></tr></thead><tbody>{''.join(rows)}</tbody></table></div>
-<p class="history-note">销售参考不是净利润。9月7—13日仅剔除2笔已知关闭订单；9月21—27日与10月5—11日按订单及售后核对，销售参考仍含售后中金额。早期未采集优惠后 ROI，显示“—”，不以原始引导支付 ROI 替代。</p>
+<p class="history-note">销售参考不是净利润。9月7—13日仅剔除2笔已知关闭订单；9月21—27日、10月5—11日与10月12—18日按订单及售后核对，销售参考仍含售后中金额。早期未采集优惠后 ROI，显示“—”，不以原始引导支付 ROI 替代。</p>
 <h3>流量与引力投放</h3><div class="history-scroll" tabindex="0" role="region" aria-label="历史流量与引力，窄屏可左右滚动"><table class="history-table"><thead><tr><th scope="col">报告周次 / 查询日期</th><th scope="col">商详访客 UV</th><th scope="col">引力周曝光</th><th scope="col">引力周阅读</th><th scope="col">引力商详访问</th><th scope="col">本周新建任务</th><th scope="col">本周验收内容</th></tr></thead><tbody>{''.join(content_rows)}</tbody></table></div>
 <p class="history-note">“—”表示未采集或未完整核验，不等于0。9月14—20日、9月28日—10月4日暂无周报归档。引力待验收为查询时点存量，详见各期正文；不作为周末历史存量横向比较。</p>
 </details><noscript><p class="history-note">浏览器未启用 JavaScript，可展开历史对照，点击报告周次切换。</p></noscript></section>'''
