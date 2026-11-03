@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-26",
+  "updated": "2026-11-03",
   "weeks": [
     {
       "id": "20260831-0906",
@@ -120,6 +120,26 @@
       "productVisits": 1150,
       "created": 0,
       "accepted": 4
+    },
+    {
+      "id": "20261026-1101",
+      "start": "2026-10-26",
+      "end": "2026-11-01",
+      "week": 44,
+      "snapshot": "2026-11-03",
+      "raw": 44124.0,
+      "orders": 126,
+      "effective": 31609.0,
+      "basis": "订单与售后核对；含售后处理中金额",
+      "pending": 2686.0,
+      "adSpend": 2703.34,
+      "discountRoi": 3.68,
+      "visitors": 29303,
+      "exposure": 17747,
+      "reads": 3050,
+      "productVisits": 824,
+      "created": 0,
+      "accepted": 5
     }
   ]
 }
