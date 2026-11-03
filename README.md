@@ -1,8 +1,10 @@
-# 戴拉 · 得物经营周报
+# 戴拉 · 得物经营周报与月报
 
 周报独立项目，包含历史周次选择、销售与售后核对结果、商品 TOP10、收藏率、得物推 ROI 和引力内容。日报由其他项目维护。
 
 - [打开周报网站](https://dewu-weekly-report.pages.dev/)
+- [打开独立月报归档](https://dewu-weekly-report.pages.dev/months/)
+- [2026年10月月报](https://dewu-weekly-report.pages.dev/months/202610/)
 - [下载周报项目](https://github.com/g17326050972-dotcom/dewu-weekly-report/archive/refs/heads/main.zip)
 
 当前归档7期：2026年8月31日—9月6日、9月7—13日、9月21—27日、10月5—11日、10月12—18日、10月19—25日、10月26日—11月1日。默认显示最新归档，支持下拉选择、较早/较新一期和历史指标对照，每期有固定分享链接。缺失周明确标注暂无归档。
@@ -10,6 +12,7 @@
 ## 文件与运行
 
 - `site/`：可部署的完整静态周报网站。
+- `monthly-archive/`：独立月报页面及月份索引；不加入周次选择。
 - `weekly-archive/pages/`：各期公开页面及本地图片。
 - `weekly-archive/weeks.json`：历史汇总指标、查询日期和核对口径。
 - `weekly-archive/ui/`：周次选择与对照样式和脚本。
@@ -31,3 +34,7 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory site
 本仓库仅包含已公开的周报及汇总；不存放原始订单、客户资料、成本工作簿、登录凭据或云站点部署身份。原得物运营 SOP 仓库中的周报副本作为历史归档，本仓库是后续周报维护入口。
 
 最近更新：2026-11-03。仓库未附开源许可证；公开可查看不等于授予任意再使用许可。
+
+## 月报归档
+
+将完整自然月核对后的公开页面放入 `monthly-archive/pages/<YYYYMM>/`，更新 `monthly-archive/months.json` 后运行同一生成器。固定路径为 `months/<YYYYMM>/`，`months/` 单独展示月份列表。10月月报按607条订单、542笔支付、145款对账，含9月同口径环比和13篇验收内容链接。售后、订单及单篇数据的快照时间分别见月报正文。

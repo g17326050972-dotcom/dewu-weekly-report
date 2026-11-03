@@ -33,3 +33,5 @@
 @media(max-width:1190px){.weekly-history{margin-left:18px;margin-right:18px}}
 @media(max-width:600px){.weekly-history{padding:18px 16px;margin:6px 12px 14px}.history-heading{gap:8px}.history-field{max-width:none;min-width:100%}.history-controls{gap:8px}.history-controls a,.history-disabled{padding:9px 10px;font-size:12px}.history-controls .history-share{margin-left:auto}.history-count{padding:3px 7px;font-size:11px}.history-context{font-size:11px}.history-table{min-width:850px}}
 @media print{.weekly-history{padding:12px;border-color:#ccc;margin:0 0 12px;box-shadow:none;break-inside:avoid}.history-controls,.history-compare,.history-count{display:none}.history-heading{margin-bottom:0}}
+
+.history-month-link{display:inline-block;background:#e5f1f3;border:1px solid #c6dde2;border-radius:8px;padding:8px 16px;margin-right:12px;font-weight:700;color:#24576c}

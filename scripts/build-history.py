@@ -48,6 +48,7 @@ def panel(current, prefix):
         rows.append(f'<tr{active}>{first}<td>{num(w["raw"], True)}</td><td>{num(w["orders"])}</td><td><strong>{num(w["effective"], True)}</strong><small>{escape(w["basis"])}</small></td><td>{num(w["pending"], True)}</td><td>{num(w["adSpend"], True, 2)}</td><td>{num(w["discountRoi"], decimals=2)}</td></tr>')
         content_rows.append(f'<tr{active}>{first}<td>{num(w["visitors"])}</td><td>{num(w["exposure"])}</td><td>{num(w["reads"])}</td><td>{num(w["productVisits"])}</td><td>{num(w["created"])}</td><td>{num(w["accepted"])}</td></tr>')
     return f'''<section id="weekly-history" class="weekly-history" aria-labelledby="history-title">
+<p class="history-note"><a class="history-month-link" href="{prefix}months/">查看月报 ↗</a> <span>整月汇总与月度环比，独立于周次列表</span></p>
 <div class="history-heading"><div><h2 id="history-title">按周查看</h2><p>切换周次，查看当周完整经营报告</p></div><span class="history-count">已归档 {len(weeks)} 期</span></div>
 <div class="history-controls"><div class="history-field"><label for="history-week-select">报告周次 · 周一至周日</label><select id="history-week-select">{''.join(options)}</select></div>{nav(current_index-1, '← 较早一期')}{nav(current_index+1, '较新一期 →')}<a class="history-share" href="{route(current)}">本期固定链接 ↗</a></div>
 <p class="history-context"><strong>当前：{label(current)}</strong> · 查询快照 {current['snapshot']}。历史数据保留当期口径；后续退款与归因结果可能变化。</p>
@@ -85,3 +86,13 @@ for w in weeks:
     render(w, output / 'reports' / w['id'], '../../')
 render(weeks[-1], output, '')
 print(f'Built {len(weeks)} historical reports; latest {weeks[-1]["id"]}; output {output}')
+
+# Monthly reports have their own archive and never enter the week selector.
+monthly = ROOT / 'monthly-archive'
+if monthly.exists():
+    months = sorted(json.loads((monthly / 'months.json').read_text())['months'], key=lambda m: m['id'], reverse=True)
+    for m in months:
+        shutil.copytree(monthly / 'pages' / m['id'], output / 'months' / m['id'], dirs_exist_ok=True)
+    cards = ''.join(f'<article><h2><a href="{escape(m["id"])}/">{escape(m["label"])}经营月报 ↗</a></h2><p>{escape(m["start"])} — {escape(m["end"])} · 查询快照 {escape(m["snapshot"])}</p><dl><div><dt>原始优惠后支付</dt><dd>{num(m["raw"],True)}</dd></div><div><dt>当前有效销售</dt><dd>{num(m["effective"],True)}</dd></div><div><dt>售后中风险</dt><dd>{num(m["pending"],True)}</dd></div><div><dt>优惠后引导 ROI</dt><dd>{num(m["discountRoi"],decimals=2)}</dd></div></dl></article>' for m in months)
+    (output / 'months' / 'index.html').write_text('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>戴拉得物 · 月报归档</title><style>body{font-family:system-ui,sans-serif;background:#f2f6f8;color:#284657;margin:0;line-height:1.7}main{max-width:1050px;margin:auto;padding:40px 22px}a{color:#276183;text-decoration:none}h1{font-size:36px;margin-bottom:6px}p{color:#627989}article{background:white;border:1px solid #dde7ee;border-radius:18px;padding:26px;margin:30px 0}dl{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}dt{font-size:13px;color:#627989}dd{font-size:25px;font-weight:700;margin:6px 0}@media(max-width:600px){dl{grid-template-columns:repeat(2,1fr)}h1{font-size:28px}article{padding:18px}}a:focus-visible{outline:3px solid #207f95}</style></head><body><main><a href="../">← 周报与历史周次</a><h1>戴拉得物经营月报</h1><p>按完整自然月核算，独立于周报与日报。</p>'+cards+'<p>有效销售已剔除关闭及完成退款，仍含售后中金额，未扣成本和费用，不是利润。各期保留查询快照。</p></main></body></html>')
+    print(f'Built {len(months)} independent monthly reports')
