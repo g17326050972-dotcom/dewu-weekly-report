@@ -30,6 +30,7 @@
       "raw": 59830,
       "orders": 151,
       "effective": 47932,
+      "partialReconciliation": true,
       "basis": "仅剔除2笔已知关闭订单，未完整核对",
       "pending": null,
       "adSpend": 4045.07,

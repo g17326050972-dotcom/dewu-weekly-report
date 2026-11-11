@@ -35,3 +35,16 @@
 @media print{.weekly-history{padding:12px;border-color:#ccc;margin:0 0 12px;box-shadow:none;break-inside:avoid}.history-controls,.history-compare,.history-count{display:none}.history-heading{margin-bottom:0}}
 
 .history-month-link{display:inline-block;background:#e5f1f3;border:1px solid #c6dde2;border-radius:8px;padding:8px 16px;margin-right:12px;font-weight:700;color:#24576c}
+
+.sales-trend{margin-top:16px;padding-top:18px;border-top:1px solid #dce5eb;scroll-margin-top:12px}
+.sales-trend p{margin:5px 0 10px;font-size:12px;color:#53697b;line-height:1.7}
+.sales-trend table{width:100%;min-width:0;border-collapse:collapse;table-layout:fixed;font-size:14px;font-variant-numeric:tabular-nums}
+.sales-trend th,.sales-trend td{padding:6px 12px;text-align:right;border-bottom:1px solid #e6edf1;line-height:1.4;white-space:normal}
+.sales-trend th:first-child{text-align:left;width:36%}
+.sales-trend thead th{background:#f3f7f9;color:#53697b;font-size:12px}
+.sales-trend tbody th{font-weight:500}
+.sales-trend tr[aria-current]>*{background:#edf6f7}
+.sales-trend a{color:#12697a;text-decoration:underline;text-underline-offset:2px}
+.sales-trend small{display:block;font-size:11px;color:#53697b}
+.sales-trend td[colspan]{font-size:12px;color:#64788a}
+@media(max-width:600px){.sales-trend th,.sales-trend td{padding:6px 4px}.sales-trend table{font-size:12px}}

@@ -24,6 +24,42 @@ def label(w):
 def num(value, money=False, decimals=0):
     return '—' if value is None else ('¥' if money else '') + f'{value:,.{decimals}f}'
 
+def sales_trend(current, route):
+    by_start = {date.fromisoformat(w['start']): w for w in weeks}
+    def cell(w, previous, metric):
+        amount = w[metric]
+        partial = metric == 'effective' and w.get('partialReconciliation', False)
+        comparable = previous and previous[metric] not in (None, 0) and amount is not None
+        if metric == 'effective':
+            comparable = comparable and not partial and not previous.get('partialReconciliation', False) and previous['basis'] == w['basis']
+        if comparable:
+            change = (amount - previous[metric]) / previous[metric]
+            direction = '上涨' if change > 0 else '下跌' if change < 0 else '持平'
+            delta = f'{direction} {abs(change):.2%}' if change else direction
+        else:
+            delta = '环比 —'
+        return f'<td><b>{num(amount, True)}</b>{"<small>部分核对</small>" if partial else ""}<small>{delta}</small></td>'
+
+    rows = []
+    day = max(by_start)
+    while day >= min(by_start):
+        w = by_start.get(day)
+        end = day + timedelta(days=6)
+        period = f'W{day.isocalendar()[1]:02d} · {day:%m.%d}–{end:%m.%d}'
+        if w:
+            prev = by_start.get(day - timedelta(days=7))
+            active = ' aria-current="true"' if w == current else ''
+            rows.append(f'<tr{active}><th scope="row"><a href="{route(w)}">{period}</a></th>{cell(w, prev, "effective")}{cell(w, prev, "raw")}</tr>')
+        else:
+            rows.append(f'<tr><th scope="row">{period}</th><td colspan="2">暂无周报归档</td></tr>')
+        day -= timedelta(days=7)
+    return f'''<section class="sales-trend" id="weekly-sales" aria-labelledby="sales-title">
+<h2 id="sales-title">每周销售与环比</h2>
+<p>金额下方为较上一自然周的涨跌幅。点击周次可查看该期完整周报。</p>
+<table><thead><tr><th scope="col">销售周次</th><th scope="col">有效销售额</th><th scope="col">优惠后支付额</th></tr></thead>
+<tbody>{''.join(rows)}</tbody></table>
+<p>有效销售额按各期快照剔除已关闭订单及已完成退款，仍含处理中售后。W37 仅剔除两笔已知关闭订单。缺少上周归档、基期为零或口径不可比时，环比显示“—”。</p></section>'''
+
 def panel(current, prefix):
     route = lambda w: f"{prefix}reports/{w['id']}/"
     current_index = weeks.index(current)
@@ -57,7 +93,8 @@ def panel(current, prefix):
 <p class="history-note">销售参考不是净利润。9月7—13日仅剔除2笔已知关闭订单；9月21—27日及10月起已归档各期按订单及售后核对，销售参考仍含售后中金额。早期未采集优惠后 ROI，显示“—”，不以原始引导支付 ROI 替代。</p>
 <h3>流量与引力投放</h3><div class="history-scroll" tabindex="0" role="region" aria-label="历史流量与引力，窄屏可左右滚动"><table class="history-table"><thead><tr><th scope="col">报告周次 / 查询日期</th><th scope="col">商详访客 UV</th><th scope="col">引力周曝光</th><th scope="col">引力周阅读</th><th scope="col">引力商详访问</th><th scope="col">本周新建任务</th><th scope="col">本周验收内容</th></tr></thead><tbody>{''.join(content_rows)}</tbody></table></div>
 <p class="history-note">“—”表示未采集或未完整核验，不等于0。9月14—20日、9月28日—10月4日暂无周报归档。引力待验收为查询时点存量，详见各期正文；不作为周末历史存量横向比较。</p>
-</details><noscript><p class="history-note">浏览器未启用 JavaScript，可展开历史对照，点击报告周次切换。</p></noscript></section>'''
+</details><noscript><p class="history-note">浏览器未启用 JavaScript，可展开历史对照，点击报告周次切换。</p></noscript>
+{sales_trend(current, route)}</section>'''
 
 def render(w, dest, prefix):
     src = source / 'pages' / w['id']
