@@ -26,7 +26,7 @@ def num(value, money=False, decimals=0):
 
 def sales_trend(current, route):
     by_start = {date.fromisoformat(w['start']): w for w in weeks}
-    def cell(w, previous, metric):
+    def change_label(w, previous, metric):
         amount = w[metric]
         partial = metric == 'effective' and w.get('partialReconciliation', False)
         comparable = previous and previous[metric] not in (None, 0) and amount is not None
@@ -38,7 +38,12 @@ def sales_trend(current, route):
             delta = f'{direction} {abs(change):.2%}' if change else direction
         else:
             delta = '环比 —'
-        return f'<td><b>{num(amount, True)}</b>{"<small>部分核对</small>" if partial else ""}<small>{delta}</small></td>'
+        return delta
+
+    def cell(w, previous, metric):
+        partial = metric == 'effective' and w.get('partialReconciliation', False)
+        note = '<small>部分核对</small>' if partial else ''
+        return f'<td><b>{num(w[metric], True)}</b>{note}<small>{change_label(w, previous, metric)}</small></td>'
 
     rows = []
     day = max(by_start)
@@ -53,12 +58,17 @@ def sales_trend(current, route):
         else:
             rows.append(f'<tr><th scope="row">{period}</th><td colspan="2">暂无周报归档</td></tr>')
         day -= timedelta(days=7)
-    return f'''<section class="sales-trend" id="weekly-sales" aria-labelledby="sales-title">
-<h2 id="sales-title">每周销售与环比</h2>
+    metric = 'effective' if current['effective'] is not None else 'raw'
+    title = '有效销售' if metric == 'effective' else '优惠后支付'
+    if current.get('partialReconciliation'):
+        title += '（部分核对）'
+    previous = by_start.get(date.fromisoformat(current['start']) - timedelta(days=7))
+    return f'''<details class="sales-trend" id="weekly-sales">
+<summary><strong>每周销售与环比</strong> <span>W{current['week']} {title} {num(current[metric], True)} · {change_label(current, previous, metric)}</span></summary>
 <p>金额下方为较上一自然周的涨跌幅。点击周次可查看该期完整周报。</p>
 <table><thead><tr><th scope="col">销售周次</th><th scope="col">有效销售额</th><th scope="col">优惠后支付额</th></tr></thead>
 <tbody>{''.join(rows)}</tbody></table>
-<p>有效销售额按各期快照剔除已关闭订单及已完成退款，仍含处理中售后。W37 仅剔除两笔已知关闭订单。缺少上周归档、基期为零或口径不可比时，环比显示“—”。</p></section>'''
+<p>有效销售额按各期快照剔除已关闭订单及已完成退款，仍含处理中售后。W37 仅剔除两笔已知关闭订单。缺少上周归档、基期为零或口径不可比时，环比显示“—”。</p></details>'''
 
 def panel(current, prefix):
     route = lambda w: f"{prefix}reports/{w['id']}/"
