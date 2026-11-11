@@ -32,13 +32,13 @@ def sales_trend(current, route):
         comparable = previous and previous[metric] not in (None, 0) and amount is not None
         if metric == 'effective':
             comparable = comparable and not partial and not previous.get('partialReconciliation', False) and previous['basis'] == w['basis']
-        if comparable:
-            change = (amount - previous[metric]) / previous[metric]
-            direction = '上涨' if change > 0 else '下跌' if change < 0 else '持平'
-            delta = f'{direction} {abs(change):.2%}' if change else direction
-        else:
-            delta = '环比 —'
-        return delta
+        if not comparable:
+            return '<span class="trend-change">环比 —</span>'
+        change = (amount - previous[metric]) / previous[metric]
+        if change == 0:
+            return '<span class="trend-change">持平</span>'
+        style, direction = ('wow-rise', '上涨') if change > 0 else ('wow-fall', '下跌')
+        return f'<span class="trend-change {style}">{direction} {abs(change):.2%}</span>'
 
     def cell(w, previous, metric):
         partial = metric == 'effective' and w.get('partialReconciliation', False)
@@ -64,7 +64,7 @@ def sales_trend(current, route):
         title += '（部分核对）'
     previous = by_start.get(date.fromisoformat(current['start']) - timedelta(days=7))
     return f'''<details class="sales-trend" id="weekly-sales">
-<summary><strong>每周销售与环比</strong> <span>W{current['week']} {title} {num(current[metric], True)} · {change_label(current, previous, metric)}</span></summary>
+<summary><strong>每周销售与环比</strong> <span class="trend-summary">W{current['week']} {title} <b>{num(current[metric], True)}</b> {change_label(current, previous, metric)}</span></summary>
 <p>金额下方为较上一自然周的涨跌幅。点击周次可查看该期完整周报。</p>
 <table><thead><tr><th scope="col">销售周次</th><th scope="col">有效销售额</th><th scope="col">优惠后支付额</th></tr></thead>
 <tbody>{''.join(rows)}</tbody></table>

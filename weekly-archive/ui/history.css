@@ -38,7 +38,7 @@
 
 .sales-trend{margin-top:8px;padding-top:5px;border-top:1px solid #dce5eb;scroll-margin-top:12px}
 .sales-trend summary{cursor:pointer;padding:5px 0;font-size:13px;color:#12697a}
-.sales-trend summary span{display:inline-block;margin-left:6px;font-size:12px;color:#53697b}
+.sales-trend .trend-summary{display:inline-block;margin-left:6px;font-size:12px;color:#53697b}
 .sales-trend p{margin:5px 0 10px;font-size:12px;color:#53697b;line-height:1.7}
 .sales-trend table{width:100%;min-width:0;border-collapse:collapse;table-layout:fixed;font-size:14px;font-variant-numeric:tabular-nums}
 .sales-trend th,.sales-trend td{padding:6px 12px;text-align:right;border-bottom:1px solid #e6edf1;line-height:1.4;white-space:normal}
@@ -50,3 +50,11 @@
 .sales-trend small{display:block;font-size:11px;color:#53697b}
 .sales-trend td[colspan]{font-size:12px;color:#64788a}
 @media(max-width:600px){.sales-trend th,.sales-trend td{padding:6px 4px}.sales-trend table{font-size:12px}}
+
+.trend-summary b{color:#27384b;font-variant-numeric:tabular-nums}
+.sales-trend .trend-change{display:inline-block;color:#586876;font-variant-numeric:tabular-nums;white-space:nowrap}
+.sales-trend .wow-rise,.wow-rise{color:#aa3040}
+.sales-trend .wow-fall,.wow-fall{color:#126841}
+.sales-trend summary .trend-change{padding:1px 7px;border-radius:5px;margin-left:3px;background:#f1f4f6}
+.sales-trend summary .wow-rise{background:#fcecef}
+.sales-trend summary .wow-fall{background:#e6f4ed}
